@@ -1,0 +1,182 @@
+const API_URL = "";
+    const API_KEY ="";
+    const API_MODEL = 'gpt';
+    const messagesDiv = document.getElementById('messagesArea');
+    const inputField = document.getElementById('msgInput');
+    const sendButton = document.getElementById('sendBtn');
+
+    let isLoading = false;
+
+    let chatHistory = [
+        { role: 'system', content: "you are assistent so you should answer in a way that is easy to"}
+    ];
+
+    function getTime() {
+        const now = new Date();
+        return now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function createCodeBlock(code, language) {
+        const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const blockId = 'code_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        
+        return `
+            <div class="code-block">
+                <div class="code-header">
+                    <span>${language || 'code'}</span>
+                    <button class="copy-btn" onclick="window.copyToClipboard('${blockId}')">📋 کپی</button>
+                </div>
+                <pre class="code-content" id="${blockId}">${escapedCode}</pre>
+            </div>
+        `;
+    }
+    function formatMessage(text) {
+        let formatted = text;
+        
+        const codeRegex = /```(\w*)\n([\s\S]*?)```/g;
+        formatted = formatted.replace(codeRegex, (match, lang, code) => {
+            return createCodeBlock(code.trim(), lang);
+        });
+        if (!text.includes('```') && (text.includes('function') || text.includes('const ') || text.includes('let ') || text.includes('var ') || text.includes('class ') || text.includes('def ') || text.includes('public static'))) {
+            const codeMatch = text.match(/(function|const|let|var|class|def|public static)[\s\S]+/);
+            if (codeMatch) {
+                formatted = text.replace(codeMatch[0], createCodeBlock(codeMatch[0], 'code'));
+            }
+        }return formatted;
+    }
+
+    function addMessage(sender, text, isUser) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `msg ${isUser ? 'user' : 'bot'}`;
+
+        if (!isUser) {
+            msgDiv.innerHTML = `${formatMessage(text)}<div class="time">${getTime()}</div>`;
+        } else {
+            msgDiv.innerHTML = `${text.replace(/\n/g, '<br>')}<div class="time">${getTime()}</div>`;
+        }
+
+        messagesDiv.appendChild(msgDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        if (isUser) {
+            chatHistory.push({ role: 'user', content: text });
+        } else {
+            chatHistory.push({ role: 'assistant', content: text });
+        }
+    }
+
+    let typingElem = null;
+    function showTyping() {
+        if (typingElem) return;
+        typingElem = document.createElement('div');
+        typingElem.className = 'typing-dots';
+        typingElem.innerHTML = '<span></span><span></span><span></span>';
+        messagesDiv.appendChild(typingElem);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function hideTyping() {
+        if (typingElem) {
+            typingElem.remove();
+            typingElem = null;
+        }
+    }
+
+    function getOfflineReply(userMsg) {
+        const msg = userMsg.trim().toLowerCase();
+        if (msg.includes('الگوریتم') || msg.includes('مرتب سازی')) {
+            return '```javascript\n// الگوریتم مرتب‌سازی حبابی (Bubble Sort)\nfunction bubbleSort(arr) {\n    let n = arr.length;\n    for(let i = 0; i < n-1; i++) {\n        for(let j = 0; j < n-i-1; j++) {\n            if(arr[j] > arr[j+1]) {\n                [arr[j], arr[j+1]] = [arr[j+1], arr[j]];\n            }\n        }\n    }\n    return arr;\n}\n\n// مثال استفاده\nconsole.log(bubbleSort([64, 34, 25, 12, 22, 11, 90]));\n```\nاین الگوریتم مرتب‌سازی حبابی با پیچیدگی زمانی O(n²) هست.';
+        }
+        if (msg.includes('فیبوناچی') || msg.includes('fibonacci')) {
+            return '```javascript\n// دنباله فیبوناچی با بازگشت\nfunction fibonacci(n) {\n    if(n <= 1) return n;\n    return fibonacci(n-1) + fibonacci(n-2);\n}\n\n// نسخه بهینه شده با حلقه\nfunction fibonacciIterative(n) {\n    let a = 0, b = 1, c;\n    for(let i = 2; i <= n; i++) {\n        c = a + b;\n        a = b;\n        b = c;\n    }\n    return n === 0 ? a : b;\n}\n\n// 10 عدد اول: 0,1,1,2,3,5,8,13,21,34\n```';
+        }
+        if (msg.includes('معادله') || msg.includes('ریاضی')) {
+            return '📐 *فرمول درجه دوم (Quadratic Formula):*\n\nبرای معادله ax² + bx + c = 0:\n\nx = [-b ± √(b² - 4ac)] / 2a\n\nمثال: برای x² + 5x + 6 = 0 جواب‌ها x = -2 و x = -3 هستند.';
+        }
+    }
+
+    async function getAIReply(userMessage) {
+        try {
+            const messagesToSend = chatHistory.filter(m => m.role !== 'system');
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: API_MODEL,
+                    messages: messagesToSend,
+                    temperature: 0.5,
+                    max_tokens: 1000
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            const reply = data.choices?.[0]?.message?.content;
+
+            if (reply && reply.trim().length > 0) {
+                return reply;
+            } else {
+                throw new Error('پاسخ خالی');
+            }
+        } catch (error) {
+            console.warn('API error:', error);
+            return getOfflineReply(userMessage);
+        }
+    }
+
+    async function sendMessage() {
+        if (isLoading) return;
+
+        const userText = inputField.value.trim();
+        if (userText === '') return;
+
+        addMessage('user', userText, true);
+        inputField.value = '';
+
+        isLoading = true;
+        sendButton.disabled = true;
+        inputField.disabled = true;
+
+        showTyping();
+
+        const botReply = await getAIReply(userText);
+
+        hideTyping();
+        addMessage('bot', botReply, false);
+
+        isLoading = false;
+        sendButton.disabled = false;
+        inputField.disabled = false;
+        inputField.focus();
+    }
+    window.copyToClipboard = function(elementId) {
+        const element = document.getElementById(elementId);
+        const text = element.innerText;
+
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = element.parentElement.querySelector('.copy-btn');
+            const originalText = btn.innerText;
+            btn.innerText = '✅ کپی شد!';
+            setTimeout(() => {
+                btn.innerText = originalText;
+            }, 1500);
+        }).catch(() => {
+            alert('کپی نشد. دستی کپی کن.');
+        });
+    };
+
+    sendButton.addEventListener('click', sendMessage);
+    inputField.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !isLoading) {
+            sendMessage();
+        }
+    });
+
+    inputField.focus();
