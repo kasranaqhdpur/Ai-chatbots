@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Core</title>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="header">
+            <h1>AI Core</h1>
+            <p>مدل زبانی پیشرفته</p>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message ai-message">
+                <div class="bubble ai-bubble">✨how can i assist you to day ?✨</div>
+                <div class="message-time" id="welcomeTime"></div>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div class="status online" id="status">
+                <span class="status-dot"></span>
+                <span id="statusText">متصل به local </span>
+            </div>
+            <button class="clear-btn" onclick="clearChat()" id="clearBtn">🗑️ پاک کردن تاریخچه</button>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="پیامت رو اینجا بنویس..." autocomplete="off">
+            <button onclick="sendMessage()" id="sendBtn"> ارسال</button>
+        </div>
+    </div>
+
+</body>
+</html>
