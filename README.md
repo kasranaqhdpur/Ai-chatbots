@@ -323,12 +323,13 @@ UI Renderer
 تمام پیشنهادها و مشارکت‌ها باعث خوشحالی خواهد بود.
 
 ---
+## 📄 License
 
-# 📄 License
+This project is licensed under the **MIT License**.
 
-این پروژه برای اهداف آموزشی، تحقیقاتی و توسعه نرم‌افزار منتشر شده است.
+Feel free to use, modify, and distribute this project under the terms of the MIT License.
 
-در صورت استفاده در پروژه‌های شخصی یا تجاری، لطفاً به توسعه‌دهنده پروژه اشاره کنید.
+See the [LICENSE](LICENSE) file for more information.
 
 ---
 
