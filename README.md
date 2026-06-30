@@ -2,12 +2,16 @@
 
 <p align="center">
 
+<a href="README.md">🇺🇸 English</a> |
+<a href="README.fa.md">🇮🇷 فارسی</a>
+
+</p>
+
 یک مجموعه از رابط‌های کاربری مدرن برای ارتباط با مدل‌های هوش مصنوعی
 
 **ساخته شده با HTML، CSS و JavaScript خالص (Vanilla JS)**
 
 پشتیبانی از **APIهای ابری** و **مدل‌های محلی Ollama**
-## 📸 Screenshots
 ## 📸 Screenshots
 
 <table>
