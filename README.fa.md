@@ -21,7 +21,7 @@ Supports both **Cloud AI APIs** and **Local LLMs powered by Ollama**.
 </td>
 
 <td align="center">
-<img src="assets/Screenshot 2026-06-30 140637.pn" width="450">
+<img src="assets/Screenshot 2026-06-30 140637.png" width="450">
 <br>
 <b>Local ChatBot</b>
 </td>
