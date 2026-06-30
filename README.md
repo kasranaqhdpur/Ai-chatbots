@@ -369,6 +369,6 @@ See the [LICENSE](LICENSE) file for more information.
 
 <p align="center">
 
-**ساخته شده با ❤️ برای توسعه‌دهندگان هوش مصنوعی**
+**ساخته شده برای توسعه‌دهندگان هوش مصنوعی**
 
 </p>
