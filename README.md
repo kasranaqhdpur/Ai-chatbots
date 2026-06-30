@@ -9,20 +9,10 @@
 پشتیبانی از **APIهای ابری** و **مدل‌های محلی Ollama**
 ## 📸 Screenshots
 
-### API ChatBot
-
 <p align="center">
-  <img src="assets/Screenshot 2026-06-30 140429.png" width="900">
+  <img src="assets/Screenshot 2026-06-30 140429.png" width="45">
+  <img src="assets/Screenshot 2026-06-30 140637.png" width="45">
 </p>
-
----
-
-### Local ChatBot
-
-<p align="center">
-  <img src="assets/Screenshot 2026-06-30 140637.png" width="900">
-</p>
-
 
 </p>
 
