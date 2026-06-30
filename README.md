@@ -10,8 +10,8 @@
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="assets/Screenshot 2026-06-30 140429.png" width="45">
-  <img src="assets/Screenshot 2026-06-30 140637.png" width="45">
+  <img src="assets/Screenshot 2026-06-30 140429.png" width="200">
+  <img src="assets/Screenshot 2026-06-30 140637.png" width="200">
 </p>
 
 </p>
